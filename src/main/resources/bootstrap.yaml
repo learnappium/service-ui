@@ -1,0 +1,13 @@
+info:
+  build:
+    name: UI Service
+    description: ReportPortal User Interface
+    version: '@version@'
+    branch: '@branch@'
+    repo: '@repo@'
+
+spring:
+  profiles:
+    active: ${rp.profiles:default}
+  application:
+    name: ui
