@@ -17,7 +17,7 @@ RUN npm run build && npm run test
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
-COPY --from=0 /go/src/github.com/reportportal/service-ui/bin/service-ui /
+COPY --from=0 /go/src/github.com/learnappium/service-ui /
 COPY --from=1 /usr/src/app/ /public
 
 ENV RP_STATICS_PATH=/public
