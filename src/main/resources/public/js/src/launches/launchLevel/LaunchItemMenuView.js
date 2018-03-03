@@ -31,6 +31,7 @@ define(function (require) {
     var ChangeModeAction = require('launches/multipleActions/changeModeAction');
     var RemoveAction = require('launches/multipleActions/removeAction');
     var ForceFinish = require('launches/multipleActions/forceFinishAction');
+    var ModalAnalyseLaunches = require('modals/modalAnalyseLaunches');
 
     var config = App.getInstance();
 
@@ -49,7 +50,6 @@ define(function (require) {
         bindings: {
             '[data-js-finish]': 'attr:{title: titleForceFinish, disabled: any(titleForceFinish)}',
             '[data-js-export-format]': 'attr:{disabled:not(isExport)}',
-            '[data-js-can-match]': 'attr:{disabled:not(isMatchIssues)}',
             '[data-js-can-analyze]': 'attr:{disabled:not(isAnalyze)}',
             '[data-js-switch-mode]': 'text:itemModeText, attr:{title: titleChangeMode, disabled:not(isChangeMode)}',
             '[data-js-remove]': 'attr: {title: removeTitle, disabled: any(removeTitle)}'
@@ -91,7 +91,7 @@ define(function (require) {
             isExport: {
                 deps: ['launch_status'],
                 get: function (launchStatus) {
-                    return (launchStatus != 'IN_PROGRESS');
+                    return (launchStatus !== 'IN_PROGRESS');
                 }
             },
             removeTitle: {
@@ -103,13 +103,7 @@ define(function (require) {
             itemModeText: {
                 deps: ['mode'],
                 get: function (mode) {
-                    return (mode == 'DEBUG') ? Localization.launches.shiftToLaunches : Localization.launches.shiftToDebug;
-                }
-            },
-            isMatchIssues: {
-                deps: ['launch_status', 'launch_isProcessing', 'launch_toInvestigate'],
-                get: function (launchStatus, launchIsProcessing, launch_toInvestigate) {
-                    return (launchStatus != 'IN_PROGRESS' && !launchIsProcessing && launch_toInvestigate > 0);
+                    return (mode === 'DEBUG') ? Localization.launches.shiftToLaunches : Localization.launches.shiftToDebug;
                 }
             }
         },
@@ -128,49 +122,58 @@ define(function (require) {
             return this.model.get('mode') === 'DEBUG';
         },
         startAnalyzeAction: function (e) {
+            var self = this;
+            var modal = new ModalAnalyseLaunches({ analyzerMode: this.model.appModel.get('configuration').analyzer_mode || 'LAUNCH_NAME' });
+            var el = $(e.currentTarget);
+            var id = this.model.get('id');
+            var isLaunchAnalyze = el.data('analyze-type') === 'analyze';
+
             e.preventDefault();
-            var self = this,
-                el = $(e.currentTarget),
-                id = this.model.get('id'),
-                isLaunchAnalyze = el.data('analyze-type') === 'analyze',
-                type = isLaunchAnalyze ? 'startLaunchAnalyze' : 'startLaunchMatch';
+
             if (!el.hasClass('disabled')) {
                 config.trackingDispatcher.trackEventNumber(isLaunchAnalyze ? 28 : 27);
-                Service[type](id)
-                    .done(function (response) {
-                        self.model.set('isProcessing', true);
-                        Util.ajaxSuccessMessenger('startAnalyzeAction');
-                    })
-                    .fail(function (error) {
-                        Util.ajaxFailMessenger(error, 'startAnalyzeAction');
+                modal.show()
+                    .done(function (data) {
+                        Service.startLaunchAnalyze(id, data.analyzerMode)
+                            .done(function () {
+                                self.model.set('isProcessing', true);
+                                Util.ajaxSuccessMessenger('startAnalyzeAction');
+                            })
+                            .fail(function (error) {
+                                Util.ajaxFailMessenger(error, 'startAnalyzeAction');
+                            });
                     });
             } else {
                 e.stopPropagation();
             }
         },
         finishLaunch: function () {
-            config.trackingDispatcher.trackEventNumber(26);
             var self = this;
+
+            config.trackingDispatcher.trackEventNumber(26);
             ForceFinish({ items: [this.model] }).done(function () {
                 self.model.collection.load(true);
             });
         },
         onClickRemove: function () {
-            config.trackingDispatcher.trackEventNumber(29);
             var self = this;
+
+            config.trackingDispatcher.trackEventNumber(29);
             RemoveAction({ items: [this.model] }).done(function () {
                 self.model.set('select', false);
                 self.model.collection.load(true);
             });
         },
         onClickExport: function (e) {
-            var $el = $(e.currentTarget),
-                format = $el.data('js-export-format');
+            var $el = $(e.currentTarget);
+            var format = $el.data('js-export-format');
+
             config.trackingDispatcher.trackEventNumber(this.exportFormats[format].code);
         },
         switchLaunchMode: function () {
-            config.trackingDispatcher.trackEventNumber(25);
             var self = this;
+
+            config.trackingDispatcher.trackEventNumber(25);
             ChangeModeAction({ items: [this.model] }).done(function () {
                 self.model.collection.load(true);
             });

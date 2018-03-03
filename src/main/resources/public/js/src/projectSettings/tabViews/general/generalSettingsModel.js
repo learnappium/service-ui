@@ -19,9 +19,9 @@
  * along with Report Portal.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(function (require, exports, module) {
-    "use strict";
-    var $ = require('jquery');
+define(function (require) {
+    'use strict';
+
     var Backbone = require('backbone');
     var App = require('app');
     var config = App.getInstance();
@@ -31,9 +31,11 @@ define(function (require, exports, module) {
         defaults: {
             interruptedJob: config.forSettings.interruptedJob[0].value,
             isAutoAnalyzerEnabled: true,
+            analyzeOnTheFly: false,
             keepLogs: config.forSettings.keepLogs[0].value,
             keepScreenshots: config.forSettings.keepScreenshots[0].value,
-            projectSpecific: config.forSettings.projectSpecific[0].value
+            projectSpecific: config.forSettings.projectSpecific[0].value,
+            analyzer_mode: config.forSettings.analyzerMode
         },
 
         getProjectSettings: function () {
@@ -42,7 +44,9 @@ define(function (require, exports, module) {
                 isAutoAnalyzerEnabled: this.get('isAutoAnalyzerEnabled'),
                 keepLogs: this.get('keepLogs'),
                 keepScreenshots: this.get('keepScreenshots'),
-                projectSpecific: this.get('projectSpecific')
+                projectSpecific: this.get('projectSpecific'),
+                analyzer_mode: this.get('analyzer_mode')
+                // analyzeOnTheFly: this.get('analyzeOnTheFly')
             };
             return {
                 configuration: data

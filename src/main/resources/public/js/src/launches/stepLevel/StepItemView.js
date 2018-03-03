@@ -29,9 +29,11 @@ define(function (require) {
     var ItemDurationView = require('launches/common/ItemDurationView');
     var StepLogDefectTypeView = require('launches/common/StepLogDefectTypeView');
     var ModalLaunchItemEdit = require('modals/modalLaunchItemEdit');
+    var ModalStepItemDetails = require('modals/modalStepItemDetails');
     var MarkdownViewer = require('components/markdown/MarkdownViewer');
     var ItemStartTimeView = require('launches/common/ItemStartTimeView');
     var CommonItemView = require('launches/common/CommonItemView');
+
 
     var config = App.getInstance();
 
@@ -46,7 +48,8 @@ define(function (require) {
             'click [data-js-tag]': 'onClickTag',
             'click [data-js-toggle-open]': 'onClickOpen',
             'click [data-js-select-label]': 'onClickSelectLabel',
-            'click [data-js-select-item]': 'onClickSelectInput'
+            'click [data-js-select-item]': 'onClickSelectInput',
+            'click [data-js-item-details]': 'onClickDetails'
         },
         bindings: {
             '[data-js-name-link]': 'attr: {href: url}',
@@ -110,6 +113,7 @@ define(function (require) {
             var self = this;
             this.noIssue = options.noIssue;
             this.filterModel = options.filterModel;
+            this.context = options.context;
             this.render();
             this.listenTo(this.model, 'scrollToAndHighlight', this.highlightItem);
             this.markdownViewer = new MarkdownViewer({ text: this.model.get('description') });
@@ -128,6 +132,7 @@ define(function (require) {
             }));
             this.renderDuration();
             this.renderStartTime();
+            this.renderRetries();
             if (this.hasIssue() && !this.noIssue) {
                 this.renderIssue();
             }
@@ -166,9 +171,16 @@ define(function (require) {
         renderIssue: function () {
             this.issueView = new StepLogDefectTypeView({
                 model: this.model,
-                el: $('[data-js-step-issue]', this.$el)
+                el: $('[data-js-step-issue]', this.$el),
+                context: this.context
             });
             this.listenTo(this.issueView, 'load:comment', this.activateAccordion);
+            this.listenTo(this.issueView, 'quickFilter:AA', function () {
+                this.filterModel.trigger('add_entity', 'issue$auto_analyzed', 'TRUE');
+            });
+            this.listenTo(this.issueView, 'quickFilter:ignoreAA', function () {
+                this.filterModel.trigger('add_entity', 'issue$ignore_analyzer', 'TRUE');
+            });
         },
         onClickTag: function (e) {
             var tag = $(e.currentTarget).data('js-tag');
@@ -181,6 +193,12 @@ define(function (require) {
             config.trackingDispatcher.trackEventNumber(149);
             var modal = new ModalLaunchItemEdit({
                 item: this.model
+            });
+            modal.show();
+        },
+        onClickDetails: function () {
+            var modal = new ModalStepItemDetails({
+                model: this.model
             });
             modal.show();
         },

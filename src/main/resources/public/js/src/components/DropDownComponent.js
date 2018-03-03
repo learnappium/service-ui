@@ -40,7 +40,8 @@ define(function (require) {
             //     data: [{name: '', value: '', disabled: false}],
             //     placeholder: 'default text',
             //     multiple: false,
-            //     defaultValue: ''
+            //     defaultValue: '',
+            //      isShowAll: false
             // }
             this.options = options;
             if (!this.options.data) {
@@ -77,7 +78,6 @@ define(function (require) {
                 if (item.value == value) { // Comparison with conversion
                     curName = item.shortName ? item.shortName : item.name;
                     curVal = item.value;
-
                     return false;
                 }
             });
@@ -94,13 +94,26 @@ define(function (require) {
             });
             this.onChangeInput();
         },
-        onChangeInput: function () {  // multiple select
+        onSelectAll: function () {
+            var allChecked = true;
+            var checkboxMas = $('input[data-value]', this.$el);
+            checkboxMas.each(function () {
+                if (!$(this).is(':checked')) { allChecked = false; }
+            });
+            checkboxMas.prop('checked', !allChecked);
+        },
+        onChangeInput: function (e) {  // multiple select
             var curValue = [];
             var curName = [];
+            if (e && e.target.value === 'all') {
+                this.onSelectAll();
+            }
             this.$el.removeClass('dropdown-error-state');
             _.each($('input:checked', this.$el), function (item) {
-                curValue.push($(item).data('value'));
-                curName.push($(item).data('name'));
+                if (item.value !== 'all') {
+                    curValue.push($(item).data('value'));
+                    curName.push($(item).data('name'));
+                }
             });
             this.currentValue = curValue;
             this.trigger('change', curValue);

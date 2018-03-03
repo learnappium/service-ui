@@ -1,6 +1,3 @@
-/**
- * Created by Alexey_Krylov1 on 8/22/2016.
- */
 /*
  * This file is part of Report Portal.
  *
@@ -29,6 +26,7 @@ define(function (require) {
     var App = require('app');
     var Localization = require('localization');
     var SingletonAppModel = require('model/SingletonAppModel');
+    var SingletonRegistryInfoModel = require('model/SingletonRegistryInfoModel');
 
     var config = App.getInstance();
 
@@ -44,16 +42,20 @@ define(function (require) {
             '[data-js-multi-action="remove"]': 'attr: {disabled: not(activeMultiDelete), title: multipleDeleteTooltip}',
             '[data-js-multi-action="loadbug"]': 'attr: {disabled: any(loadBugTooltip), title: loadBugTooltip}',
             '[data-js-multi-action="postbug"]': 'attr: {disabled: any(postBugTooltip), title: postBugTooltip}',
+            '[data-js-multi-action="ignoreaa"], [data-js-multi-action="includeaa"]': 'attr: {disabled: any(ignoreActionTooltip), title: ignoreActionTooltip}',
             '[data-js-refresh-counter]': 'text: refreshItems, classes: {hide: not(refreshItems)}'
         },
 
         computeds: {
-            validateForHistoryBtn: function () {
-                var interrupted = config.launchStatus.interrupted;
-                var showBtn = (this.launchModel.get('status') !== interrupted)
-                    && !this.collectionItems.validateForAllCases()
-                    && !_.isEmpty(this.collectionItems.models);
-                return showBtn;
+            validateForHistoryBtn: {
+                deps: ['itemsCount'],
+                get: function () {
+                    var interrupted = config.launchStatus.interrupted;
+                    var showBtn = (this.launchModel.get('status') !== interrupted)
+                        && !this.collectionItems.validateForAllCases()
+                        && !_.isEmpty(this.collectionItems.models);
+                    return showBtn;
+                }
             },
             getHistoryHref: function () {
                 return this.getHistoryLink();
@@ -78,11 +80,18 @@ define(function (require) {
                     return Localization.launches.configureTBS;
                 }
                 return '';
+            },
+            ignoreActionTooltip: function () {
+                if (this.registryInfoModel.get('isAnalyzerOn')) {
+                    return '';
+                }
+                return Localization.launches.noAnalyzer;
             }
         },
 
         template: 'tpl-launch-step-control',
         initialize: function (options) {
+            this.registryInfoModel = new SingletonRegistryInfoModel();
             this.context = options.context;
             this.filterModel = options.filterModel;
             this.launchModel = options.launchModel;
@@ -91,11 +100,13 @@ define(function (require) {
             this.appModel = new SingletonAppModel();
             this.model = new (Epoxy.Model.extend({
                 defaults: {
-                    refreshItems: 0
+                    refreshItems: 0,
+                    itemsCount: 0
                 }
             }))();
             this.listenTo(this.collectionItems, 'loading', this.resetRefreshItems);
             this.listenTo(this.collectionItems, 'change:issue', _.debounce(this.updateInfoLine.bind(this), 50));
+            this.listenTo(this.collectionItems, 'reset', this.resetCollectionItems);
             this.render();
             this.filterEntities = new FilterEntitiesView({
                 el: $('[data-js-refine-entities]', this.$el),
@@ -112,6 +123,9 @@ define(function (require) {
         },
         updateInfoLine: function () {
             this.parentModel.collection.forceUpdate();
+        },
+        resetCollectionItems: function () {
+            this.model.set({ itemsCount: this.collectionItems.models.length });
         },
         activateMultiple: function () {
             $('[data-js-refresh], [data-js-history-view]', this.$el).addClass('disabled');

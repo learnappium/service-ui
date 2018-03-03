@@ -32,6 +32,17 @@ define(function (require) {
             services: {}
         },
         computeds: {
+            isAnalyzerOn: {
+                deps: ['services'],
+                get: function (services) {
+                    if (services && services.API && services.API.extensions
+                        && services.API.extensions.analyzer
+                        && services.API.extensions.analyzer.length) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
             analyticsExtensions: {
                 deps: ['services'],
                 get: function (services) {
@@ -66,15 +77,6 @@ define(function (require) {
                     return {};
                 }
             },
-            loadExternalService: {
-                deps: ['authExtensions'],
-                get: function (authExtensions) {
-                    if (authExtensions.epam) {
-                        return true;
-                    }
-                    return false;
-                }
-            },
             bugTrackingExtensions: {
                 deps: ['services'],
                 get: function (services) {
@@ -103,6 +105,12 @@ define(function (require) {
                         return services.API.metadata.activitiesObjectType;
                     }
                     return [];
+                }
+            },
+            isEpamInstance: {
+                deps: ['authExtensions'],
+                get: function (authExtensions) {
+                    return !!authExtensions.epam;
                 }
             }
         },

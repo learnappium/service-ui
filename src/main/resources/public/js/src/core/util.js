@@ -31,20 +31,20 @@ define(function (require, exports, module) {
     var App = require('app');
     var Validators = require('validators');
     var Service = require('coreService');
-    var SingletonDefectTypeCollection = require('defectType/SingletonDefectTypeCollection');
 
     require('baron');
     require('cookie');
+    require('select2');
+
     // require('nicescroll');
     // require('isLoading');
-    require('select2');
+
 
     var config = App.getInstance(),
         stringsHasBeenExtended = false,
         MobileNavigator = false,
         deleteDialog,
         xhrPool = [];
-
     var Util = {};
     _.extend(Util, {
 
@@ -901,25 +901,15 @@ define(function (require, exports, module) {
             return config.project.configuration.externalSystem.length;
         },
 
-        canStartMatchIssues: function (launch) {
-            if (!launch) return false;
-            /* var userValid = Util.isInPrivilegedGroup();
-             if (!userValid) {
-             userValid = launch.owner === config.user.user_login;
-             }*/
-            return launch.status !== 'IN_PROGRESS'
-                && launch.statistics
-                && launch.statistics.defects
-                && (+launch.statistics.defects.to_investigate.total > 0)
-                && !launch.isProcessing;
-        },
-
         // don't touch
         isUnassignedLock: function (member, project) {
             return !member;
         },
         isDeleteLock: function (project) {
-            return project.projectId.toLowerCase() === config.demoProjectName;
+            if (project && project.entryType && project.entryType !== 'INTERNAL') {
+                return true;
+            }
+            return false;
         },
 
         canManageMembers: function () {

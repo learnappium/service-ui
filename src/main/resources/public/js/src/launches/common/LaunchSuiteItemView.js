@@ -61,6 +61,7 @@ define(function (require) {
             '[data-js-name]': 'text: name, attr: {title: nameTitle}',
             '[data-js-launch-number]': 'text: numberText',
             '[data-js-item-edit]': 'classes: {hide: hideEdit}',
+            '[data-js-is-retries]': 'classes: {hide: not(hasRetries)}',
             '[data-js-owner-block]': 'classes: {hide: not(owner)}',
             '[data-js-owner-name]': 'text: owner',
             '[data-js-time-from-now]': 'text: startFromNow',
@@ -161,7 +162,7 @@ define(function (require) {
                 deps: ['url', 'has_childs'],
                 get: function (url, hasChilds) {
                     if (hasChilds) {
-                        return this.allCasesUrl('failed');
+                        return this.allCasesUrl('failedPlusInterrupted');
                     }
                     return undefined;
                 }
@@ -191,6 +192,9 @@ define(function (require) {
             switch (type) {
             case 'total':
                 statusFilter = '&filter.in.status=PASSED,FAILED,SKIPPED,INTERRUPTED&filter.in.type=STEP';
+                break;
+            case 'failedPlusInterrupted':
+                statusFilter = '&filter.in.status=FAILED,INTERRUPTED&filter.in.type=STEP';
                 break;
             case 'passed':
             case 'failed':
@@ -240,6 +244,7 @@ define(function (require) {
             this.renderDuration();
             this.renderStartTime();
             this.renderDefects();
+            this.renderRetries();
         },
         highlightItem: function () {
             var self;
@@ -380,6 +385,8 @@ define(function (require) {
             this.menu && this.menu.destroy();
             this.duration && this.duration.destroy();
             this.startTime && this.startTime.destroy();
+            this.retries && this.retries.destroy();
+            this.retriesView && this.retriesView.destroy();
             _.each(this.statistics, function (v) {
                 if (_.isFunction(v.destroy)) {
                     v.destroy();

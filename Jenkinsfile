@@ -8,7 +8,7 @@ node {
 
         stage('Checkout'){
                 checkout scm
-                sh 'git checkout develop'
+                sh 'git checkout master'
                 sh 'git pull'
             }
 
@@ -21,7 +21,7 @@ node {
 
             }, 'Build Server': {
                     // Export environment variables pointing to the directory where Go was installed
-                    docker.image('golang:1.9').inside("-u root -e GOPATH=${env.WORKSPACE}")  {
+                    docker.image('golang:1.10').inside("-u root -e GOPATH=${env.WORKSPACE}")  {
                         sh 'PATH=$PATH:$GOPATH/bin && mkdir $GOPATH/bin && make build-server v=`cat VERSION`-$BUILD_NUMBER'
                     }
                     archiveArtifacts artifacts: 'bin/*'
