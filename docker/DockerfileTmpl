@@ -1,18 +1,26 @@
-FROM alpine:3.6
+FROM golang:1.9
+WORKDIR /go/src/github.com/learnappium/service-ui/
+ARG service
+ARG version
+COPY ./Makefile ./glide.yaml ./glide.lock ./main.go ./
+RUN make get-build-deps
+RUN make build-server
 
-LABEL maintainer="Andrei Varabyeu <andrei_varabyeu@epam.com>"
-LABEL version={{.version}}
+FROM node:argon
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY ./src/main/resources/public/package.json /usr/src/app/
+RUN npm install
+COPY ./src/main/resources/public/ /usr/src/app/
+RUN npm run build && npm run test
 
-ENV APP_DOWNLOAD_URL https://dl.bintray.com/epam/reportportal/{{.version}}
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=0 /go/src/github.com/learnappium/service-ui /
+COPY --from=1 /usr/src/app/ /public
 
-ADD ${APP_DOWNLOAD_URL}/service-ui_linux_amd64 /service-ui
-ADD ${APP_DOWNLOAD_URL}/ui.tar.gz /
-
-RUN chmod +x /service-ui
-RUN tar -zxvf ui.tar.gz -C / && rm -f ui.tar.gz
-
-ENV RP_STATICSPATH=/public
-
+ENV RP_STATICS_PATH=/public
 
 EXPOSE 8080
 ENTRYPOINT ["/service-ui"]
