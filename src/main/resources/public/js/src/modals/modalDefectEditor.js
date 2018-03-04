@@ -39,7 +39,7 @@ define(function (require) {
         className: 'modal-defect-editor',
 
         bindings: {
-            '[data-js-save-post-wrapper]': 'classes: {disabled: not(isBtsConfigure)}',
+            //'[data-js-save-post-wrapper]': 'classes: {disabled: not(isBtsConfigure)}',
             '[data-js-save-load-wrapper]': 'classes: {disabled: not(isBtsAdded)}',
             '[data-js-save-post]': 'attr: {disabled: not(isBtsConfigure)}',
             '[data-js-save-load]': 'attr: {disabled: not(isBtsAdded)}',
