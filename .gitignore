@@ -23,3 +23,5 @@ data/
 
 ##Release dir
 release/
+.settings
+.project
