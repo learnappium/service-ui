@@ -16,6 +16,7 @@
   "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^6.3.6",
+    "config-proxy": "^1.7.0",
     "cssnano": "^3.5.2",
     "eslint": "^3.18.0",
     "eslint-config-airbnb-base": "^11.1.3",

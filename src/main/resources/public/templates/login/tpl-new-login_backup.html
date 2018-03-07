@@ -1,0 +1,161 @@
+<div class="login-content">
+    <div class="left-block">
+        <div><h1 style="text-align: center" style="text-shadow: #818181">ADSK Report Portal</h1>
+            <span style="text-align: right">qa report at center</span></div>
+        </br></br></br></br>
+
+<style>
+.overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0, 0.9);
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.overlay1 {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0, 0.9);
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.overlay-content {
+    position: relative;
+    top: 25%;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.overlay a:hover, .overlay a:focus {
+    color: #f1f1f1;
+}
+
+.overlay .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 60px;
+}
+
+@media screen and (max-height: 450px) {
+  .overlay a {font-size: 20px}
+  .overlay .closebtn {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+  }
+}
+
+
+
+</style>
+<h2>What reportportal can do</h2>
+
+<div id="myNav" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  
+    <iframe style="border: 0; width: 100%; height: 100%" src="http://alpha-grafana.dmg.autodesk.com/"></iframe>
+ 
+</div>
+
+
+<!--<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Open grafana dashboards </span> -->
+<span style="font-size:30px;">&#9776; Load test Grafana dashboards </span>
+</br>
+</br>
+</br>
+
+<!--    
+<div id="myNav" class="overlay">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    
+      <iframe style="border: 0; width: 100%; height: 100%" src="http://alpha-grafana.dmg.autodesk.com/"></iframe>
+   
+  </div>
+  
+  
+  <!--<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Open grafana dashboards </span> -->
+  <span style="font-size:30px;">&#9776; QA Regression test status dashboards </span>
+  </br>
+</br>
+</br>
+
+<span style="font-size:30px;">&#9776; QA Security test status dashboards </span>
+</br>
+</br>
+</br>
+<!--
+<div id="myNav1" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav1()">&times;</a> 
+  
+    <iframe style="border: 0; width: 100%; height: 100%" src="http://alpha-backoffice.dmg.autodesk.com/"></iframe>
+ 
+</div> -->
+
+
+<!--<span style="font-size:30px;cursor:pointer" onclick="openNav1()">&#9776; Open backoffice dashboards </span> -->
+<span style="font-size:30px;" >&#9776; Backoffice dashboards </span>
+<script>
+function openNav() {
+    document.getElementById("myNav").style.width = "100%";
+}
+
+function closeNav() {
+    document.getElementById("myNav").style.width = "0%";
+}
+
+function openNav1() {
+    document.getElementById("myNav1").style.width = "100%";
+}
+
+function closeNav1() {
+    document.getElementById("myNav1").style.width = "0%";
+}
+</script>
+<!--
+<iframe width=100% height=100% src="http://alpha-grafana.dmg.autodesk.com/dashboard/db/qa-load-test-with-jmeter">QA load test grafana dashboard</iframe>
+   
+-->
+
+
+<!--
+        
+        <div class="separator"></div>
+        <div class="socials-block" data-js-social-block>
+            <a href="https://github.com/reportportal" class="gh-icon" target="_blank"></a>
+            <a href="https://www.facebook.com/ReportPortal.io" class="fb-icon" target="_blank"></a>
+            <a href="http://twitter.com/ReportPortal_io" class="tw-icon" target="_blank"></a>
+            <a href="http://youtube.com/c/ReportPortalCommunity" class="yt-icon" target="_blank"></a>
+            <a href="https://vk.com/reportportal_io" class="vk-icon" target="_blank"></a>
+            <a href="https://reportportal-slack-auto.herokuapp.com/" class="slk-icon" target="_blank"></a>
+            <a href="mailto:support@reportportal.io" class="mail-icon"></a>
+        </div>
+-->
+    </div>
+    <div class="right-block">
+        <div class="subpage-container" data-js-subpage-container></div>
+        <div class="service-versions" data-js-service-versions-container></div>
+    </div>
+</div>
