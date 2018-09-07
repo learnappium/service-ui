@@ -100,7 +100,7 @@
                         <%= coma %>
                     <% } %>
                 <% }); %>
-                <%= data.text.ui.to %>
+                <%= item.actionType !== 'unlink_issue' ? data.text.ui.to : data.text.ui.from %>
                 <%= data.text.widgets.testItem %>
                 <span data-js-item-id="<%= item.loggedObjectRef %>">
                     <span class="loading-indicator"></span>
@@ -112,6 +112,14 @@
                     target="_blank"
                     href="#<%= data.properties.projectUrl %>/settings/notifications">
                     <%= data.text.widgets.emailNotifications %></a>.
+            <% } %>
+            <% if(item.objectType == 'index'){ %>
+            <%= data.text.widgets[item.actionType] %>
+            <a class="rp-blue-link-undrl"
+               target="_blank"
+               href="#<%= data.properties.projectUrl %>/settings/autoAnalysis">
+                <%= data.text.widgets.aaConfig %></a>:
+                <%= data.text.activity[item.actionType] %>.
             <% } %>
             <% if(item.objectType == 'project'){ %>
                 <span>
@@ -134,6 +142,24 @@
                         <%= data.text.activity[k] %><%= i < size ? ',' : '' %>.
                     <% } %>
                 <% }); %>
+            <% } %>
+            <% if(item.objectType == 'a-analysis'){ %>
+            <span>
+                    <%=  data.text.widgets[item.actionType] %>
+                    <a class="rp-blue-link-undrl"
+                       target="_blank"
+                       href="#<%= data.properties.projectUrl %>/settings/autoAnalysis">
+                        <%= data.text.widgets.aaProperties %></a>:
+                </span>
+            <% var size = _.size(item.history), i = 0; %>
+            <% _.each(item.history, function(v, k){ %>
+            <% i++; %>
+            <%= data.text.activity[k] || k %>
+            <%= data.text.ui.from %>
+            <%- data.replaceValues(v.oldValue) %>
+            <%= data.text.ui.to %>
+            <%- data.replaceValues(v.newValue) %><%= i < size ? ',' : '.' %>
+            <% }); %>
             <% } %>
         </div>
         <div class="activity-item-info">

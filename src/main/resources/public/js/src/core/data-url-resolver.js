@@ -149,8 +149,8 @@ define(['app'], function (App) {
     var deleteTestItemUrl = function (id) {
         return getProjectBase() + '/item/' + id;
     };
-    var launchAnalyzeUrl = function (id, mode) {
-        return getProjectBase() + '/launch/' + id + '/analyze?analyze_mode=' + mode;
+    var launchAnalyzeUrl = function () {
+        return getProjectBase() + '/launch/analyze';
     };
     var launchFinishUrl = function (id) {
         return getProjectBase() + '/launch/' + id + '/stop';
@@ -162,6 +162,10 @@ define(['app'], function (App) {
     var updateEmailProjectSettings = function (id) {
         id = id || config.project.projectId;
         return config.apiVersion + 'project/' + id + '/emailconfig';
+    };
+
+    var indexAction = function () {
+        return config.apiVersion + 'project/' + config.project.projectId + '/index';
     };
 
     var createExternalSystem = function () {
@@ -525,6 +529,7 @@ define(['app'], function (App) {
         tagsLaunchAutoCompleteUrl: tagsLaunchAutoCompleteUrl,
         updateProject: updateProject,
         updateEmailProjectSettings: updateEmailProjectSettings,
+        indexAction: indexAction,
         createExternalSystem: createExternalSystem,
         updateExternalSystem: updateExternalSystem,
         clearExternalSystem: clearExternalSystem,

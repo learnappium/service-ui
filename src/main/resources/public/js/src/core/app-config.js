@@ -45,6 +45,7 @@ define(function (require) {
             userUrl: '../api/v1/user/',
             user: null,
             fullUser: null,
+            fullscreenMode: false,
             loginView: null,
             router: null,
             deletingLaunches: [],
@@ -182,11 +183,39 @@ define(function (require) {
 
             restorationStamp: '?reset=',
             commentsSeparator: '\n&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;&#8801;\n',
+            logStrNumberAutoAnalyze: [
+                { name: '2', value: '2' },
+                { name: '3', value: '3' },
+                { name: '4', value: '4' },
+                { name: '5', value: '5' },
+                { name: Localization.ui.all, value: '-1' }
+            ],
+            autoAnalysisAccuracy: {
+                STRICT: {
+                    minDocFreq: '5',
+                    minShouldMatch: '95',
+                    minTermFreq: '7',
+                    numberOfLogLines: '2'
+                },
+                MODERATE: {
+                    minDocFreq: '7',
+                    minShouldMatch: '80',
+                    minTermFreq: '1',
+                    numberOfLogLines: '2'
+                },
+                LIGHT: {
+                    minDocFreq: '7',
+                    minShouldMatch: '60',
+                    minTermFreq: '1',
+                    numberOfLogLines: '2'
+                }
+            },
 
             forSettings: {
                 defaultPassword: '11111111',
                 projectNotFoundPattern: 'No project could be found',
                 analyzerMode: 'LAUNCH_NAME',
+                accuracyMode: 'MODERATE',
                 projectSpecific: [
                     { name: 'DEFAULT', value: 'DEFAULT' },
                     { name: 'BDD', value: 'BDD' }

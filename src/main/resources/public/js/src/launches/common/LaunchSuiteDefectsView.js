@@ -25,10 +25,9 @@ define(function (require) {
     var Epoxy = require('backbone-epoxy');
     var Util = require('util');
     var App = require('app');
-    var d3 = require('d3');
-    var c3 = require('c3');
     var SingletonDefectTypeCollection = require('defectType/SingletonDefectTypeCollection');
     var LaunchSuiteDefectsHoverView = require('launches/common/LaunchSuiteDefectsHoverView');
+    var DonutChartComponent = require('components/DonutChartComponent');
     var config = App.getInstance();
 
     var LaunchSuiteDefectsView = Epoxy.View.extend({
@@ -39,7 +38,7 @@ define(function (require) {
         },
         bindings: {
             '[data-js-defects-total]': 'text: totalDefects, attr: {style: defectBorderColor}',
-            '[data-js-link]': 'attr: {href: allCasesUrl}'
+            '[data-js-link]': 'attr: {href: executionLink}'
         },
         computeds: {
             totalDefects: {
@@ -52,14 +51,14 @@ define(function (require) {
                     return 0;
                 }
             },
-            allCasesUrl: function () {
-                var url = this.model.get('url');
-                var statusFilter = '&filter.in.issue$issue_type=';
-                var subDefects = this.defectsCollection.toJSON();
-                var defects = Util.getSubDefectsLocators(this.type, subDefects).join('%2C');
-
-                var appendFilter = 'filter.eq.has_childs=false' + statusFilter + defects;
-                return url + '?' + appendFilter;
+            executionLink: {
+                deps: ['url', 'has_childs'],
+                get: function (url, hasChilds) {
+                    if (hasChilds) {
+                        return this.allCasesUrl();
+                    }
+                    return undefined;
+                }
             },
             defectBorderColor: function () {
                 return 'border-color: ' + this.defectsCollection.getMainColorByType(this.type);
@@ -89,6 +88,15 @@ define(function (require) {
                 });
                 this.applyBindings();
             }
+        },
+        allCasesUrl: function () {
+            var url = this.model.get('url');
+            var statusFilter = '&filter.in.issue$issue_type=';
+            var subDefects = this.defectsCollection.toJSON();
+            var defects = Util.getSubDefectsLocators(this.type, subDefects).join('%2C');
+
+            var appendFilter = 'filter.eq.has_childs=false' + statusFilter + defects;
+            return url + '?' + appendFilter;
         },
         onClickDefectType: function () {
             this.model.trigger('drill:item', this.model);
@@ -127,52 +135,34 @@ define(function (require) {
             return statistics.defects[this.type];
         },
         getDefectChartData: function () {
-            var data = {
-                columns: [],
-                colors: {}
-            };
+            var self = this;
+            var data = [];
             var defects = this.getDefectByType();
-            _.each(defects, function (val, key) {
-                if (key !== 'total') {
-                    data.columns.push([key]);
-                    data.colors[key] = this.defectsCollection.getDefectType(key).color;
+            var offset = 75;
+            Object.keys(defects).forEach(function(defect) {
+                if (defect !== 'total') {
+                    var val = defects[defect];
+                    var percents = val / defects.total * 100;
+
+                    data.push({
+                        value: percents,
+                        color: self.defectsCollection.getDefectType(defect).color,
+                        offset: 100 - offset,
+                    });
+                    offset = offset + percents;
                 }
-            }, this);
-            _.each(defects, function (val, key) {
-                if (key !== 'total') {
-                    _.find(data.columns, function (column) { return column[0] === key; }).push(val);
-                }
-            }, this);
+            });
             return data;
         },
         drawDonutChart: function () {
             var data = this.getDefectChartData();
             var $el = $('[data-js-chart]', this.$el);
-            this.chart = c3.generate({
-                bindto: $el[0],
-                data: {
-                    columns: data.columns,
-                    type: 'donut',
-                    order: null,
-                    colors: data.colors
-                },
-                size: {
-                    width: 56,
-                    height: 56
-                },
-                donut: {
-                    width: 12,
-                    label: {
-                        show: false
-                    }
-                },
-                interaction: {
-                    enabled: false
-                },
-                legend: {
-                    show: false
-                }
+            var chart = new DonutChartComponent({
+                viewBox: 64,
+                strokeWidth: 13,
+                items: data,
             });
+            $el.html(chart.el);
         },
         onDestroy: function () {
             this.hoverView && this.hoverView.destroy();

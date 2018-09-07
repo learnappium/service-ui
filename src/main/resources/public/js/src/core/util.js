@@ -268,7 +268,7 @@ define(function (require, exports, module) {
             }
         },
         ajaxBeforeSend: function (req) {
-            req.setRequestHeader('Authorization', config.userModel.get('token'));
+            req.setRequestHeader('Authorization', config.fullscreenMode ? config.userModel.get('apiToken') : config.userModel.get('token'));
             req.setRequestHeader('X-XSRF-TOKEN', $.cookie('XSRF-TOKEN'));
             req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
             this.addXhrToPool(req);
@@ -608,6 +608,9 @@ define(function (require, exports, module) {
             }
             if (minutes > 0) {
                 time = time + minutes + 'm';
+                if (!days && !hours && seconds) {
+                    time += ' ' + seconds + 's';
+                }
             }
             // time = time + ' ' + seconds + 's';
             // if (time === '0s' && seconds === 0) {
@@ -1060,7 +1063,11 @@ define(function (require, exports, module) {
             var options = _.isArray(initOptions) ? initOptions : [initOptions];
             _.each(options, function (option) {
                 if (option.max) {
-                    $el.attr('maxLength', option.max);
+                    if (option.validator === 'minMaxNumberRequired') {
+                        $el.attr('maxlength', option.max.toString().length);
+                    } else {
+                        $el.attr('maxlength', option.max);
+                    }
                 }
                 if (Validators[option.validator]) {
                     validators.push({ validate: Validators[option.validator], options: option });

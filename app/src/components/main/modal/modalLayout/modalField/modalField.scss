@@ -1,0 +1,22 @@
+.modal-field {
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.modal-field-label {
+  flex: 1 0 auto;
+  color: $COLOR--charcoal-grey;
+  padding-right: 30px;
+  text-align: right;
+  font-family: $FONT-REGULAR;
+  font-size: 13px;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.modal-field-content {
+  width: 100%;
+  min-width: 0;
+}

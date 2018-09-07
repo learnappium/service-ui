@@ -22,6 +22,7 @@
 define(['util'], function () {
     return {
         ui: {
+            all: 'Все',
             actions: 'Действия',
             on: 'Вкл',
             off: 'Выкл',
@@ -51,6 +52,7 @@ define(['util'], function () {
             update: 'Обновить',
             del: 'Удалить',
             remove: 'Убрать',
+            generate: 'Сгенерировать',
             submit: 'Отправить',
             confirm: 'Подтвердить',
             create: 'Создать',
@@ -60,7 +62,8 @@ define(['util'], function () {
             escToCancel: '<strong>Esc</strong> для отмены',
             ctrlEnterToSubmit: '<strong>Ctrl + Enter</strong> для подтверждения',
             loading: 'Загружается',
-            load: 'Загрузка',
+            link: 'Прикрепить',
+            unlink: 'Открепить',
             post: 'Отправить',
             analyse: 'Анализировать',
             gallery: 'Галерея',
@@ -163,7 +166,6 @@ define(['util'], function () {
             name: 'Имя',
             description: 'Описание',
             import: 'Импорт',
-            note: 'Замечание:',
             searchName: 'Поиск по имени',
             perPage: 'на странице',
             of: 'из',
@@ -217,7 +219,8 @@ define(['util'], function () {
                 'Октябрь',
                 'Ноябрь',
                 'Декабрь'
-            ]
+            ],
+            note: 'К сведению'
         },
 
         uiCommonElements: {
@@ -368,10 +371,11 @@ define(['util'], function () {
         itemEvents: {
             updateItemIssue: 'обновил данные элемента',
             updateItem: 'обновил элемент',
-            attachIssue: 'привязал ошибку',
+            linkIssue: 'привязал ошибку',
+            unlinkIssue: 'отвязал ошибку',
             postIssue: 'отправил ошибку',
             changedByAnalyzer: 'АА изменил тип дефекта',
-            issueAttachByAnalyzer: 'AA привязал ошибку'
+            issueLoadByAnalyzer: 'AA привязал ошибку'
         },
 
         widgets: {
@@ -497,10 +501,14 @@ define(['util'], function () {
             update_bts: 'обновлено',
             delete_bts: 'удалено',
             create_bts: 'сконфигурировано',
-            attach_issue: 'добавленная ошибка',
-            post_issue: 'опубликованная ошибка',
+            attach_issue: 'прикрепленная ошибка',
+            link_issue: 'добавил ошибку',
+            post_issue: 'опубликовал ошибку',
+            unlink_issue: 'открепил ошибку',
             delete_issue: 'удаленная ошибка',
             testItem: 'элемент тестирования',
+            delete_index: 'обновлено',
+            generate_index: 'обновлено',
             update_project: 'обновлено',
             update_defect: 'обновлено',
             delete_defect: 'удалено',
@@ -626,7 +634,10 @@ define(['util'], function () {
             launchesOnFilter: 'Количество запусков в фильтре - ',
             selectWidget: 'Выберите тип виджета из списка',
             launchInterrupted: 'Прогон прерван',
-            zoomWidgetArea: 'Масштабирование виджета'
+            zoomWidgetArea: 'Масштабирование виджета',
+            aaConfig: 'конфигурация Авто-Анализа',
+            aaProperties: 'параметры Авто-Анализа',
+            update_analyzer: 'обновлено'
         },
 
         userProfile: {
@@ -809,7 +820,7 @@ define(['util'], function () {
             relatedIssue: 'Связанная ошибка:',
             includeLogs: 'Лог',
             includeComments: 'Комментарий',
-            includeScreenshots: 'Скриншоты',
+            includeAttachments: 'Скриншоты',
             fillAllRequired: 'Заполните все необходимые поля',
             credentialsSoft: 'В случае незаполнения полей будут использованы учетные данные Report Portal',
             credentialsSoftTfs: 'В случае незаполнения полей будут использованы учетные данные Windows',
@@ -857,15 +868,17 @@ define(['util'], function () {
             postIssue: 'Отправить ошибку',
             postBug: 'Отправить ошибку',
             postBugTo: 'Отправить ошибку в',
-            loadBug: 'Загрузить ошибку',
+            linkIssue: 'Прикрепить ошибку',
+            unlinkIssue: 'Открепить ошибку',
             addIssueId: 'Добавить ID ошибки',
             copyDefect: 'Копировать дефект',
             sendDefect: 'Отправить дефект',
             key: 'Кнопка Ошибки (для множественных вариантов - наберите ID ошибки и нажмите Ввод)',
             configureTBS: 'Настройте Систему oтслеживания oшибок на отправку ошибок',
             configureTBSLoad: 'Настройте Систему oтслеживания oшибок на загрузку ошибок',
-            noIssues: 'Вы не можете отправить ошибку, если элемент не имеет ошибок',
-            noIssuesLoad: 'Вы не можете загрузить ошибку, если элемент не имеет ошибок',
+            noIssues: 'Вы не можете отправить ошибку, если элемент не имеет дефекта',
+            noIssuesLoad: 'Вы не можете прикрепить ошибку, если элемент не имеет дефекта',
+            noIssueTicket: 'У элемента нет прикрепленной ошибки',
             historyView: 'История',
             skippedDuration: 'ПРОПУЩЕНО. Длительность: ',
             stoppedDuration: 'Прогон ОСТАНОВЛЕН после:',
@@ -938,6 +951,7 @@ define(['util'], function () {
             issueId: 'Введите ID ошибки',
 
             retries: 'попыток',
+            rtr: 'попыток',
 
             aaBadgeTooltip: 'Проанализировано Авто-Анализом',
             withAA: 'C "AA" меткой',
@@ -951,7 +965,7 @@ define(['util'], function () {
             noAnalyzer: 'Нет включенных анализаторов',
             alreadyIgnoredAA: 'Элемент уже игнорируется Авто-Анализом',
             alreadyIncludedAA: 'Элемент уже включен в Авто-Анализ',
-            withoutDefect: 'Элемент не имеет деффекта',
+            withoutDefect: 'Элемент не имеет дефекта',
             linkedBug: 'Ошибка в СОД',
             noLinkedBug: 'Нет ошибки в СОД'
         },
@@ -1137,11 +1151,17 @@ define(['util'], function () {
                 delete_launch: 'Удаление запуска',
                 update_project: 'Обновление проекта',
                 post_issue: 'Публикация ошибки',
-                attach_issue: 'Добавление ошибки',
+                link_issue: 'Добавление ошибки',
+                link_issue_aa: 'Добавление ошибки АА',
+                unlink_issue: 'Открепление ошибки',
                 update_item: 'Обновление элемента',
                 create_user: 'Создание пользователя',
                 start_import: 'Начало импорта',
-                finish_import: 'Окончание импорта'
+                finish_import: 'Окончание импорта',
+                analyze_item: 'АА изменил тип дефекта',
+                generate_index: 'Генерация индекса',
+                delete_index: 'Удаление индекса',
+                update_analyzer: 'Обновление Авто-Анализа'
             },
             objectTypes: {
                 all: 'Все',
@@ -1237,7 +1257,8 @@ define(['util'], function () {
             notFoundStackTrace: 'Нет трассировки стека для отображения',
             goToLog: 'Перейдите к трассировке стека в записи журнала',
             nextError: 'Следующая ошибка',
-            consoleView: 'Консольный вид'
+            consoleView: 'Консольный вид',
+            harFileError: 'Ваш браузер не поддерживает плагин для отображения файлов с расширением .har. Вы можете скачать файл по <a target="_blank" href="%%%">ссылке</a>.'
         },
 
         defectNameById: {
@@ -1263,8 +1284,10 @@ define(['util'], function () {
             cnt: 'содержит',
             '!cnt': 'не содержит',
             and: 'и',
-            has: 'и',
-            in: 'или',
+            has: 'все',
+            '!has': 'без любого',
+            in: 'любой',
+            '!in': 'без всех',
             or: 'или',
             gte: 'больше или равно',
             lte: 'меньше или равно'
@@ -1277,8 +1300,10 @@ define(['util'], function () {
             cnt: 'сд',
             '!cnt': 'нсд',
             and: 'и',
-            has: 'и',
-            in: 'или',
+            has: 'все',
+            '!has': '!люб',
+            in: 'люб',
+            '!in': '!все',
             or: 'или',
             gte: '&ge;',
             lte: '&le;'
@@ -1373,16 +1398,20 @@ define(['util'], function () {
             autoAnalysisBase: 'Стратегия авто Анализа',
             autoAnalysisBaseFirstOpt: 'Все запуски',
             autoAnalysisBaseSecondOpt: 'Запуски с одинаковыми именами',
-            autoAnalysisBaseFirstTip: 'Тестовые элементы будут проанализированы на основе ранее проанализированных данных во всех запусках',
-            autoAnalysisBaseSecondTip: 'Тестовые элементы будут проанализированы на основе ранее проанализированных данных в запусках с одинаковыми именами',
+            autoAnalysisBaseThirdOpt: 'Только текущий запуск',
+            autoAnalysisBaseFourthOpt: 'Элементы требующие анализа',
+            autoAnalysisBaseFifthOpt: 'Элементы проанализированные автоматически (АА)',
+            autoAnalysisBaseSixthOpt: 'Элементы проанализированные вручную',
+            autoAnalysisBaseFirstTip: 'Тестовые элементы будут проанализированы на основе ранее проанализированных данных в запусках с одинаковыми именами',
+            autoAnalysisBaseSecondTip: 'Тестовые элементы будут проанализированы на основе ранее проанализированных данных во всех запусках',
             emailNotifications: 'Оповещения по электронной почте',
             emailRecipients: 'Получатели',
             duplicateEmailCase: 'Такое правило опощещений уже существует. Нельзя создать такое же.',
             emailInCase: 'В случае',
             rule: 'ПРАВИЛО',
             deleteRule: 'Удалить ПРАВИЛО',
-            onTheFly: 'Auto analys on the fly',
-            onTheFlyDescription: 'If checked - each test item will be analyzed as soon as it\'s finished.',
+            onTheFly: 'Автоанализировать на лету',
+            onTheFlyDescription: 'Если выбрано - каждый элемент тестирования будет проанализирован сразу после завершения.',
             from: 'От',
             addRule: 'Добавить новое правило',
             launchOwner: 'Владелец запуска',
@@ -1449,7 +1478,30 @@ define(['util'], function () {
 
             ruleDeleted: 'Правило будет удалено после отправки',
             noCustomDefectsWereAdded: 'Не было добавлено пользовательских дефектов',
-            noCustomColors: 'Нет цветов для обновления'
+            noCustomColors: 'Нет цветов для обновления',
+            autoAnalysisSettings: 'Авто-анализ',
+            autoAnalysisMode: 'Точность Авто-Анализа',
+            autoAnalysisMinDocFreq: 'Minimum document frequency',
+            autoAnalysisMinTermFreq: 'Minimum term frequency',
+            autoAnalysisMinShouldMatch: 'Minimum should match',
+            autoAnalysisNumberOfLog: 'Количество строк журнала',
+            strictMode: 'Жесткий',
+            moderateMode: 'Средний',
+            lightMode: 'Мягкий',
+            matchDescription: 'Процент совпадения слов между анализируемым логом и логом, сохраненным в ElasticSearch. Логи из ElasticSearch c процентом ниже установленного будут игнорировать в Авто-Анализе.',
+            docFreqDescription: 'Установите минимальную частоту сохраненных логов в ElasticSearch (Индекс), в которых должно употребляться слово из анализируемого лога. Если количество логов ниже указанного значения, данное слово будет игнорироваться в Авто-Анализе. Чем чаще оно употребляется в Индексе, тем меньше значения оказывает на результаты Авто-Анализа.',
+            termFreqDescription: 'Установите минимальную частоту слова в анализируемом логе. Если количество слов ниже указанного значения, это слово будет игнорироваться в Авто-Анализе. Чем чаще оно употребляется в анализируемом логе, тем больше значение оказывает на результаты Авто-Анализа.',
+            strNumberDescription: 'Количество первых строк лога, которые будут учитываться при Авто-Анализе.',
+            indexActions: 'Действия с индексом',
+            removeIndex: 'Удалить индекс',
+            removeIndexDescription: 'Вся информация будет удалена из ElasticSearch. Для генерации данных заново Вы можете начать анализировать тестовые результаты вручную или сгенерировать данные автоматически',
+            removeIndexConfirm: 'Вы уверены, что хотите удалить всю информацию из ElasticSearch?',
+            generateIndex: 'Сгенерировать индекс',
+            generateIndexDescription: 'Вся информация будет удалена из ElasticSearch и сгенерирована заново, на основании проанализированных данных на Вашем проекте с учетом действующих настроек Авто-Анализа. Вы сможете запустить Авто-Анализ после окончания процесса, о котором будете уведомлены письмом по электронной почте',
+            generateIndexConfirm: 'Вы уверены, что хотите заново сгенерировать индекс в ElasticSearch? ',
+            noteText: 'По окончанию процесса Вы получите письмо по электронной почте.',
+            indexInProgress: 'В прогрессе...',
+            noAutoAnalysisService: 'Сервис ANALYZER не запущен'
         },
 
         bts: {
@@ -1684,7 +1736,11 @@ define(['util'], function () {
             btw: 'между',
             not: ' не ',
             and: ' и ',
-            andb: ' ВКЛЮЧАЯ '
+            andb: ' ВКЛЮЧАЯ ',
+            has: 'содержит',
+            '!has': 'без любого из',
+            in: 'есть любой из',
+            '!in': 'не содержит',
         },
 
         successMessages: {
@@ -1762,7 +1818,9 @@ define(['util'], function () {
             changedColorDefectTypes: 'Типы дефектов обновлены.',
             updateDefect: 'Дефекты обновлены',
             updateServerSettings: 'Настройки сервера успешно обновлены',
-            addUserWithoutEmail: 'Пользователь создан, но отправить сообщение невозможно, поскольку почтовый сервер сломался или выключен'
+            addUserWithoutEmail: 'Пользователь создан, но отправить сообщение невозможно, поскольку почтовый сервер сломался или выключен',
+            removeIndex: 'Индекс был успешно удален',
+            generateIndex: 'Генерация индекса началась'
         },
 
         failMessages: {
@@ -1866,6 +1924,7 @@ define(['util'], function () {
             issueTitleLength: 'Имя должно иметь размер от \'4\' до \'512\'',
             componentsLength: 'Компоненты не должны состоять из одних пробелов и быть пустыми',
             logMessageLength: 'Длина сообщения должна быть от %%% до %%%.',
+            autoAnalysisLength: 'Параметр принимает значения от %%% до %%%.',
             filtersNameLength: 'Имя фильтров должно быть длиной от %%% до %%%',
             filterNameLength: 'Имя фильтра должно быть длиной от %%% до %%% знаков.',
             filterDescriptionLength: 'Описание фильтра должно быть длиной от %%% до %%%.',
@@ -1972,8 +2031,8 @@ define(['util'], function () {
             deleteLaunch: 'Удалить запуск',
             shareWidgetDashboard: 'Поделиться виджетом, панелью управления',
             unShareWidgetDashboard: 'Ограничить доступ к виджету, панели управления',
-            postIssue: 'Отправить ошибку в СОД',
-            attachIssue: 'Приложить ошибку к СОД',
+            updateIssue: 'Действия с ошибками',
+            linkIssue: 'Приложить ошибку к СОД',
             history: 'История',
             project: 'Проект',
             login: 'Логин',
@@ -2002,7 +2061,10 @@ define(['util'], function () {
             updateFilter: 'Обновить фильтр',
             import: 'Импорт',
             projectNameIn: 'Имя проекта в СОД',
-            copyLink: 'Копировать ссылку'
+            copyLink: 'Копировать ссылку',
+            generateIndex: 'Генерация индекса',
+            deleteIndex: 'Удаление индекса',
+            updateAutoAnalysis: 'Обновить Авто-Анализ'
         },
 
         wizard: {
@@ -2088,6 +2150,7 @@ define(['util'], function () {
             ignoreAA: 'Игнорировать %%% при Авто-Анализе',
             includeAA: 'Включить %%% в Авто-Анализ',
             analyseLaunches: 'Анализировать запуски',
+            unlinkIssue: 'Открепить ошибку',
             testItemsDetails: 'Детали тестового элемента',
             receiveIssue: 'Получить предыдущий результат',
             sendIssue: 'Отправить результат в последний элемент'
@@ -2143,7 +2206,9 @@ define(['util'], function () {
             filterOptions: 'Варианты Фильтров',
 
             analyseLaunchesLabel: 'Выберите стратегию Авто Анализа:',
-            analyseLaunchesNote: 'Процедурой Авто Анализа будут обработаны только тестовые элементы имеющие тип дефекта  "Требует Анализа" ',
+            analyseLaunchesLabel1: 'Выберите тестовые элементы которые должны быть проанализированы:',
+            analyseWarning1: 'Вы не можете совершить операцию до тех пор пока не выбран как минимум один объект.',
+            analyseWarning2: ' Вы не можете совершить операцию над проанализированными вручную и автоматически тестовыми единицами одновременно. Пожалуйста, выбирете что-то одно.',
 
             msgDeleteItems: 'Вы уверены, что хотите удалить %%%? Вы потеряете доступ к %%%. Это действие нельзя отменить.',
             msgDeleteDefectType: 'Я уверен, что хочу удалить I am sure I want to remove custom defect type',
@@ -2158,6 +2223,7 @@ define(['util'], function () {
             msgIncludeAA: 'Вы уверены, что хотите включить %%% в Авто-Анализ?',
             msgReceiveIssue: 'Вы уверены, что хотите получить данные о дефекте из предыдущего неудачного элемента?',
             msgSendIssue: 'Вы уверены, что хотите отправить данные о дефекте в последний элемент?',
+            msgUnlinkIssue: 'Вы уверены, что хотите открепить ошибки в СОД?',
             invalidFileType: 'Неверный формат файла',
             invalidFileSize: 'Размер файла больше 32 Mb',
             testUID: 'UID элемента:',
@@ -2185,9 +2251,16 @@ define(['util'], function () {
             email: 'Уведомления по электронной почте',
             keepLogs: 'Сохранять журнал',
             keepScreenshots: 'Сохранять скриншоты',
-            auto_analyze: 'Автоанализатор',
+            auto_analyze: 'переключение Автоанализатора',
             launchInactivity: 'Время бездействия запуска',
-            statisticsCalculationStrategy: 'Выбрать стратегию'
+            statisticsCalculationStrategy: 'Выбрать стратегию',
+            delete_index: 'индекс был удален',
+            generate_index: 'индекс был сгенерирован',
+            number_of_log_lines: 'Количество строк лога',
+            min_doc_freq: 'Minimum document frequency',
+            min_should_match: 'Minimum should match',
+            min_term_freq: 'Minimum term frequency',
+            analyze_mode: 'Стратегия Авто-Анализа'
         },
 
         permissionMap: {
@@ -2231,7 +2304,8 @@ define(['util'], function () {
         },
         modalDefectEditor: {
             saveAndPost: 'Сохранить и отправить ошибку',
-            saveAndLoad: 'Сохранить и привязать ошибку'
+            saveAndLoad: 'Сохранить и прикрепить ошибку',
+            saveAndUnlink: 'Сохранить и открепить ошибку'
         },
         date: {
             days: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],

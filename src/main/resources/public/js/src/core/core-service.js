@@ -201,6 +201,14 @@ define([
         return call('PUT', urls.updateProject(), data);
     };
 
+    var generateIndex = function () {
+        return call('PUT', urls.indexAction());
+    };
+
+    var removeIndex = function () {
+        return call('DELETE', urls.indexAction());
+    };
+
     var updateEmailProjectSettings = function (data) {
         return call('PUT', urls.updateEmailProjectSettings(), data);
     };
@@ -247,8 +255,12 @@ define([
         return call('PUT', urls.updateTestItemUrl(id), data);
     };
 
-    var startLaunchAnalyze = function (id, mode) {
-        return call('POST', urls.launchAnalyzeUrl(id, mode), null, null, true);
+    var startLaunchAnalyze = function (id, mode, itemsMode) {
+        return call('POST', urls.launchAnalyzeUrl(), {
+            analyze_items_mode: itemsMode,
+            analyzer_mode: mode,
+            launch_id: id
+        }, null, true);
     };
 
     var mergeLaunches = function (data) {
@@ -432,6 +444,8 @@ define([
 
         updateProject: updateProject,
         updateEmailProjectSettings: updateEmailProjectSettings,
+        generateIndex: generateIndex,
+        removeIndex: removeIndex,
         updateDefaultProject: updateDefaultProject,
         getUserInfo: getUserInfo,
         getCurrentUser: getCurrentUser,

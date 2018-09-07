@@ -22,6 +22,7 @@
 define(['util'], function () {
     return {
         ui: {
+            all: 'All',
             actions: 'Actions',
             on: 'ON',
             off: 'OFF',
@@ -51,6 +52,7 @@ define(['util'], function () {
             update: 'Update',
             del: 'Delete',
             remove: 'Remove',
+            generate: 'Generate',
             submit: 'Submit',
             confirm: 'Confirm',
             create: 'Create',
@@ -60,7 +62,8 @@ define(['util'], function () {
             escToCancel: '<strong>Esc</strong> to cancel',
             ctrlEnterToSubmit: '<strong>Ctrl + Enter</strong> to submit',
             loading: 'Loading',
-            load: 'Load',
+            link: 'Link',
+            unlink: 'Unlink',
             post: 'Post',
             analyse: 'Analyse',
             gallery: 'Gallery',
@@ -163,7 +166,6 @@ define(['util'], function () {
             name: 'Name',
             description: 'Description',
             import: 'Import',
-            note: 'Note:',
             searchName: 'Search by name',
             perPage: 'per page',
             of: 'of',
@@ -217,7 +219,8 @@ define(['util'], function () {
                 'October',
                 'November',
                 'December'
-            ]
+            ],
+            note: 'Note'
         },
 
         uiCommonElements: {
@@ -312,10 +315,11 @@ define(['util'], function () {
         itemEvents: {
             updateItemIssue: 'updated item issue',
             updateItem: 'updated item',
-            attachIssue: 'attached issue',
+            linkIssue: 'linked issue',
+            unlinkIssue: 'unlinked issue',
             postIssue: 'posted issue',
             changedByAnalyzer: 'AA changed defect type',
-            issueAttachByAnalyzer: 'AA attached issue'
+            issueLoadByAnalyzer: 'AA linked issue'
         },
 
         widgets: {
@@ -438,13 +442,16 @@ define(['util'], function () {
             update_bts: 'updated',
             delete_bts: 'removed',
             create_bts: 'configured',
-            attach_issue: 'added isssue',
+            link_issue: 'linked issue',
             post_issue: 'posted issue',
+            unlink_issue: 'unlinked issue',
             delete_issue: 'removed issue',
             testItem: 'test item',
             update_project: 'updated',
             update_defect: 'updated',
             delete_defect: 'deleted',
+            delete_index: 'updated',
+            generate_index: 'updated',
             defectTypes: 'defect types',
             defectType: 'defect type',
             casesLabel: 'cases',
@@ -477,7 +484,7 @@ define(['util'], function () {
             failedTestCasesTableDescription: 'shows the TOP-20 most failing test cases within the specified previous launches.',
 
             uniqueBugsTable: 'Unique bugs table',
-            uniqueBugsTableDescription: 'shows real identified bugs, posted to the bug tracking system, and existing in the BTS bugs, loaded on the project.',
+            uniqueBugsTableDescription: 'shows real identified bugs, posted to the bug tracking system, and existing in the BTS bugs, linked on the project.',
 
             launchesTable: 'Launches table',
             launchesTableDescription: 'shows the configurable table of launches.',
@@ -566,7 +573,10 @@ define(['util'], function () {
             launchesOnFilter: 'Number of launches in the filter is ',
             selectWidget: 'Choose widget type from the list below',
             launchInterrupted: 'Run interrupted',
-            zoomWidgetArea: 'Zoom widget area'
+            zoomWidgetArea: 'Zoom widget area',
+            aaProperties: 'Auto-Analysis properties',
+            aaConfig: 'Auto-Analysis configurations',
+            update_analyzer: 'updated'
         },
 
         userProfile: {
@@ -748,7 +758,7 @@ define(['util'], function () {
             relatedIssue: 'Related issue:',
             includeLogs: 'Logs',
             includeComments: 'Comment',
-            includeScreenshots: 'Screenshots',
+            includeAttachments: 'Attachments',
             fillAllRequired: 'Fill in all required fields',
             credentialsSoft: 'In case of empty fields Report Portal credentials will be used',
             credentialsSoftTfs: 'In case of empty fields Windows credentials will be used',
@@ -797,15 +807,17 @@ define(['util'], function () {
             postIssue: 'Post issue',
             postBug: 'Post issue',
             postBugTo: 'Post bug to',
-            loadBug: 'Load issue',
+            linkIssue: 'Link issue',
+            unlinkIssue: 'Unlink issue',
             addIssueId: 'Add issue ID',
             copyDefect: 'Copy defect',
             sendDefect: 'Send defect',
             key: 'Issue key (for multiple options - type issue ID and press Enter)',
             configureTBS: 'Configure bug tracking system to post issue',
-            configureTBSLoad: 'Configure bug tracking system to load issue',
-            noIssues: 'You can\'t post bug if item has no issues',
-            noIssuesLoad: 'You can\'t Load bug if item has no issues',
+            configureTBSLoad: 'Configure bug tracking system to link issue',
+            noIssues: 'You can\'t post bug if item has no defect type',
+            noIssuesLoad: 'You can\'t link issue if item has no defect type',
+            noIssueTicket: 'Item doesn\'t have a linked issue',
             historyView: 'History',
             skippedDuration: 'SKIPPED. Duration: ',
             stoppedDuration: 'Run STOPPED after:',
@@ -878,6 +890,7 @@ define(['util'], function () {
             issueId: 'Issue ID',
 
             retries: 'retries',
+            rtr: 'rtr',
             stackTrace: 'STACK TRACE',
             openInLog: 'Open in Log view',
 
@@ -1079,11 +1092,17 @@ define(['util'], function () {
                 delete_launch: 'Delete launch',
                 update_project: 'Update project',
                 post_issue: 'Post issue',
-                attach_issue: 'Attach issue',
+                link_issue: 'Link issue',
+                link_issue_aa: 'AA linked issue',
+                unlink_issue: 'Unlink issue',
                 update_item: 'Update item',
                 create_user: 'Create user',
                 start_import: 'Start import',
-                finish_import: 'Finish import'
+                finish_import: 'Finish import',
+                analyze_item: 'AA changed defect type',
+                generate_index: 'Generate index',
+                delete_index: 'Remove index',
+                update_analyzer: 'Update Auto-Analysis'
             },
             objectTypes: {
                 all: 'all',
@@ -1179,7 +1198,8 @@ define(['util'], function () {
             notFoundStackTrace: 'No stack trace to display',
             goToLog: 'Go to stack trace in log message',
             nextError: 'Next error',
-            consoleView: 'Console view'
+            consoleView: 'Console view',
+            harFileError: 'Your browser doesn\'t support viewer for .har files. You can download file using <a href="%%%" target="_blank" >link</a>.'
         },
 
         defectNameById: {
@@ -1205,8 +1225,10 @@ define(['util'], function () {
             cnt: 'contains',
             '!cnt': 'not contains',
             and: 'and',
-            has: 'and',
-            in: 'or',
+            has: 'all',
+            '!has': 'without any',
+            in: 'any',
+            '!in': 'without all',
             or: 'or',
             gte: 'greater than or equal',
             lte: 'less than or equal'
@@ -1219,8 +1241,10 @@ define(['util'], function () {
             cnt: 'cnt',
             '!cnt': '!cnt',
             and: 'and',
-            has: 'and',
-            in: 'or',
+            has: 'all',
+            '!has': '!any',
+            in: 'any',
+            '!in': '!all',
             or: 'or',
             gte: '&ge;',
             lte: '&le;'
@@ -1295,8 +1319,8 @@ define(['util'], function () {
             scheduleForInterupt: 'Schedule time for Job to interrupt inactive launches',
             keepLogs: 'Keep logs',
             howKeepLogs: 'How long to keep old logs in launches. Related launches structure will be saved, in order to keep statistics',
-            keepScreen: 'Keep screenshots',
-            howKeepScreen: 'How long to keep screenshots in system',
+            keepScreen: 'Keep attachments',
+            howKeepScreen: 'How long to keep attachments in system',
             strategyRegular: 'Regular',
             strategyBdd: 'BDD',
             bts: 'Bug tracking system',
@@ -1315,15 +1339,19 @@ define(['util'], function () {
             autoAnalysisBase: 'Base for Auto Analysis',
             autoAnalysisBaseFirstOpt: 'All launches',
             autoAnalysisBaseSecondOpt: 'Launches with the same name',
-            autoAnalysisBaseFirstTip: 'The test items are analyzed on base of previously investigated data in all launches',
-            autoAnalysisBaseSecondTip: 'The test items are analyzed on base of previously investigated data in launches with the same name',
+            autoAnalysisBaseThirdOpt: 'Only current launch',
+            autoAnalysisBaseFourthOpt: 'To investigated items',
+            autoAnalysisBaseFifthOpt: 'Items analyzed automatically (by AA)',
+            autoAnalysisBaseSixthOpt: 'Items analyzed manually',
+            autoAnalysisBaseFirstTip: 'The test items are analyzed on base of previously investigated data in launches with the same name',
+            autoAnalysisBaseSecondTip: 'The test items are analyzed on base of previously investigated data in all launches',
             emailNotifications: 'E-mail notifications',
             emailRecipients: 'Recipients',
             duplicateEmailCase: 'Such notification rule already exists. You can\'t create duplicate.',
             emailInCase: 'In case',
             rule: 'RULE',
             deleteRule: 'Delete RULE',
-            onTheFly: 'Auto analys on the fly',
+            onTheFly: 'Auto analysis on the fly',
             onTheFlyDescription: 'If checked - each test item will be analyzed as soon as it\'s finished.',
             from: 'From',
             addRule: 'Add new rule',
@@ -1391,7 +1419,30 @@ define(['util'], function () {
 
             ruleDeleted: 'Rule will be deleted after submit',
             noCustomDefectsWereAdded: 'No custom defects were added',
-            noCustomColors: 'No colors to update'
+            noCustomColors: 'No colors to update',
+            autoAnalysisSettings: 'Auto-Analysis',
+            autoAnalysisMode: 'Mode of Auto-Analyse Accuracy',
+            autoAnalysisMinDocFreq: 'Minimum document frequency',
+            autoAnalysisMinTermFreq: 'Minimum term frequency',
+            autoAnalysisMinShouldMatch: 'Minimum should match',
+            autoAnalysisNumberOfLog: 'Number of log lines',
+            strictMode: 'Strict',
+            moderateMode: 'Moderate',
+            lightMode: 'Light',
+            matchDescription: 'Percent of words equality between analyzed log and particular log from the ElasticSearch. If a log from ElasticSearch has the value less then set, this log will be ignored for AA.',
+            docFreqDescription: 'Set the minimum frequency of the saved logs in ElasticSearch (index) in which word from analyzed log should be used. If the log count is below the specified value, that word will be ignored for AA in the analyzed log. The more often the word appears in index, the lower it weights.',
+            termFreqDescription: 'Set the minimum frequency of the word in the analyzed log. If the word count is below the specified value, this word will be ignored for AA. The more often the word appears in the analyzed log, the higher it weights.',
+            strNumberDescription: 'The number of first lines of log message that should be considered in ElasticSearch.',
+            indexActions: 'Actions with index',
+            removeIndex: 'Remove index',
+            removeIndexDescription: 'All data with your investigations will be deleted from the ElasticSearch. For creating a new one you could start to investigate test results manually or generate data based on previous results on the project once again',
+            removeIndexConfirm: 'Are you sure to remove all data from the ElasticSearch?',
+            generateIndex: 'Generate index',
+            generateIndexDescription: 'All data is removed from ElasticSearch and new one is generated based on all previous investigations on the project in accordance with current analysis settings. You can start auto-analyse test results after receiving an e-mail about the end of the generation process',
+            generateIndexConfirm: 'Are you sure to generate index in the ElasticSearch?',
+            noteText: 'You will receive an e-mail after the end of the process.',
+            indexInProgress: 'In progress...',
+            noAutoAnalysisService: 'Service ANALYZER is not running'
         },
 
         bts: {
@@ -1626,7 +1677,11 @@ define(['util'], function () {
             btw: 'between',
             not: ' not ',
             and: ' and ',
-            andb: ' AND '
+            andb: ' AND ',
+            has: 'has',
+            '!has': 'without any of',
+            in: 'has any of',
+            '!in': 'without'
         },
 
         successMessages: {
@@ -1704,7 +1759,9 @@ define(['util'], function () {
             changedColorDefectTypes: 'Defect types have been updated.',
             updateDefect: 'Defects have been updated',
             updateServerSettings: 'Server settings were successfully updated',
-            addUserWithoutEmail: 'User has been created, but impossible to send message due to email server configuration is broken or switched-off'
+            addUserWithoutEmail: 'User has been created, but impossible to send message due to email server configuration is broken or switched-off',
+            removeIndex: 'Index was removed successfully',
+            generateIndex: 'Index generation is in progress'
         },
 
         failMessages: {
@@ -1808,6 +1865,7 @@ define(['util'], function () {
             issueTitleLength: 'Title should have size from \'4\' to \'512\'',
             componentsLength: 'Components should not contains only white spaces and shouldn\'t be empty',
             logMessageLength: 'Message length should have size from %%% to %%%.',
+            autoAnalysisLength: 'The parameter should have value from %%% to %%%.',
             filtersNameLength: 'Filter name length should have size from %%% to %%%',
             filterNameLength: 'Filter name length should have size from %%% to %%% characters.',
             filterDescriptionLength: 'Filter description length should have size from %%% to %%%.',
@@ -1914,8 +1972,8 @@ define(['util'], function () {
             deleteLaunch: 'Delete launch',
             shareWidgetDashboard: 'Share widget, dashboard',
             unShareWidgetDashboard: 'Unshare widget, dashboard',
-            postIssue: 'Post issue to BTS',
-            attachIssue: 'Attach issue to BTS',
+            updateIssue: 'Actions with issues',
+            linkIssue: 'Attach issue to BTS',
             history: 'History',
             project: 'Project',
             login: 'Login',
@@ -1944,7 +2002,10 @@ define(['util'], function () {
             updateFilter: 'Update filter',
             import: 'Import',
             projectNameIn: 'Project name in BTS',
-            copyLink: 'Copy link'
+            copyLink: 'Copy link',
+            generateIndex: 'Generate index',
+            deleteIndex: 'Remove index',
+            updateAutoAnalysis: 'Update Auto-Analysis settings'
         },
 
         wizard: {
@@ -2031,6 +2092,7 @@ define(['util'], function () {
             includeAA: 'Include %%% into Auto-Analysis',
             receiveIssue: 'Receive previous result',
             sendIssue: 'Send result to the last item',
+            unlinkIssue: 'Unlink issue',
             analyseLaunches: 'Analyse launches',
             testItemsDetails: 'Test item details'
         },
@@ -2085,7 +2147,9 @@ define(['util'], function () {
             filterOptions: 'Filter options',
 
             analyseLaunchesLabel: 'Choose the base on which the Auto Analysis will be performed:',
-            analyseLaunchesNote: 'Only items with defect type "To investigate" will come through an auto-analysis procedure.',
+            analyseLaunchesLabel1: 'Choose the test items that should be analyzed:',
+            analyseWarning1: 'You can not perform this operation unless at least one item is chosen.',
+            analyseWarning2: 'You can not perform this operation for Auto-analyzed and Manually analyzed items simultaneously. Please choose one of them.',
 
             msgDeleteItems: 'Are you sure to delete %%%? %%% will no longer exist.',
             msgDeleteDefectType: 'I am sure I want to remove custom defect type',
@@ -2100,6 +2164,7 @@ define(['util'], function () {
             msgIncludeAA: 'Are you sure to include %%% into Auto-Analysis?',
             msgReceiveIssue: 'Are you sure to receive defect data from previous failed item?',
             msgSendIssue: 'Are you sure to send defect data to the last item?',
+            msgUnlinkIssue: 'Are you sure to unlink issue/s for test items?',
             invalidFileType: 'Incorrect file format',
             invalidFileSize: 'File size is more than 32 Mb',
             testUID: 'Unique test case ID:',
@@ -2126,10 +2191,17 @@ define(['util'], function () {
         activity: {
             email: 'E-mail notifications',
             keepLogs: 'Keep logs',
-            keepScreenshots: 'Keep screenshots',
-            auto_analyze: 'Auto analysis',
+            keepScreenshots: 'Keep attachments',
+            auto_analyze: 'switch Auto Analysis',
             launchInactivity: 'Launch inactivity timeout',
-            statisticsCalculationStrategy: 'Select strategy'
+            statisticsCalculationStrategy: 'Select strategy',
+            delete_index: 'remove index',
+            generate_index: 'generate index',
+            number_of_log_lines: 'Number of log lines',
+            min_doc_freq: 'Minimum document frequency',
+            min_should_match: 'Minimum should match',
+            min_term_freq: 'Minimum term frequency',
+            analyze_mode: 'Base for Auto Analysis'
         },
 
         permissionMap: {
@@ -2174,7 +2246,8 @@ define(['util'], function () {
 
         modalDefectEditor: {
             saveAndPost: 'Save and post issue',
-            saveAndLoad: 'Save and load issue'
+            saveAndLoad: 'Save and link issue',
+            saveAndUnlink: 'Save and unlink issue'
         }
     };
 });

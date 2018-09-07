@@ -29,13 +29,14 @@ define(function (require) {
         { value: 'start_launch', name: Localization.forms.startLaunch },
         { value: 'finish_launch', name: Localization.forms.finishLaunch },
         { value: 'delete_launch', name: Localization.forms.deleteLaunch },
-        { value: 'post_issue', name: Localization.forms.postIssue },
+        { value: 'update_issue', name: Localization.forms.updateIssue },
         { value: 'create_user', name: Localization.forms.createUser },
         { value: 'update_dashboard', name: Localization.forms.updateDashboard },
         { value: 'update_widget', name: Localization.forms.updateWidget },
         { value: 'update_filter', name: Localization.forms.updateFilter },
         { value: 'update_bts', name: Localization.forms.updateBts },
         { value: 'update_project', name: Localization.forms.updateProject },
+        { value: 'update_analyzer', name: Localization.forms.updateAutoAnalysis },
         { value: 'update_defects', name: Localization.forms.updateDefects },
         { value: 'import', name: Localization.forms.import }
 
@@ -46,8 +47,9 @@ define(function (require) {
         update_filter: ['create_filter', 'update_filter', 'delete_filter'],
         update_bts: ['create_bts', 'update_bts', 'delete_bts'],
         update_defects: ['update_defect', 'delete_defect'],
-        post_issue: ['post_issue', 'attach_issue'],
-        import: ['start_import', 'finish_import']
+        update_issue: ['post_issue', 'link_issue', 'unlink_issue'],
+        import: ['start_import', 'finish_import'],
+        update_analyzer: ['update_analyzer', 'generate_index', 'delete_index']
     };
 
     return {
@@ -99,7 +101,7 @@ define(function (require) {
                                     result.push(activityType);
                                 }
                             });
-                            widgetOptions.actionType = result;
+                            widgetOptions.actionType = _.uniq(result);
                             model.setWidgetOptions(widgetOptions);
                         }
                     }
